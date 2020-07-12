@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+using System.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,15 @@ namespace Api
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
 
             });
+            services.AddCors(OptionalFieldAttribute=>
+            {
+              OptionalFieldAttribute.AddPolicy("CorsPolicy",policy=>
+              {
+                  policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+              });
+            });
             services.AddControllers();
+        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,10 +53,13 @@ namespace Api
             }
 
             //app.UseHttpsRedirection();
+        
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
