@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using MediatR;
+using Application.Activities;
 
 namespace Api
 {
@@ -40,6 +42,7 @@ namespace Api
                   policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
               });
             });
+            services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddControllers();
         
         }
